@@ -1,0 +1,39 @@
+### Maven ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+### Resources cached during the app build ###
+.config
+.m2
+
+### Node, NPM, Yarn ###
+.yarn
+/node
+/node_modules
+npm-debug.log
+yarn-error.log
+.cache
+
+### Angular ###
+.angular
+.sass-cache
+
+### Local Configuration ###
+.env
+cypress.env.json

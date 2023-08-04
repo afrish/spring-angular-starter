@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/.." || exit
+
+source .env
+source sh/utils
+
+echo "CYPRESS_BASE_URL: ${CYPRESS_BASE_URL}"
+
+if ! curl --output /dev/null --silent --head --fail "${CYPRESS_BASE_URL}"; then
+  LOCAL_URL="http://localhost:${DEV_HTTP_PORT}/"
+
+  echo "No app running on ${CYPRESS_BASE_URL}. Starting it with Docker Compose at ${LOCAL_URL}..."
+  export CYPRESS_BASE_URL="${LOCAL_URL}"
+
+  user_id="$(id -u)" group_id="$(id -g)" docker compose up -d
+
+  wait_for_service_startup "${CYPRESS_BASE_URL}"
+fi
+
+yarn run lint
+yarn run test
+yarn run e2e
+
+sh/test

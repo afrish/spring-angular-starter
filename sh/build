@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/.." || exit
+
+if [[ "$1" == "" ]]; then
+    echo "Failure! Pass the release version to this script as parameter #1"
+    exit 1;
+fi
+
+docker image rm -f "sample/spring-angular-starter:$1" || true
+docker build -t "sample/spring-angular-starter:$1" .

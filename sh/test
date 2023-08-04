@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/.." || exit
+
+docker run --rm -it \
+  -v .:/app -v $HOME/.m2:/app/.m2 -w /app \
+  --user "$(id -u):$(id -g)" \
+  --env HOME=/app --env XDG_CONFIG_HOME=/app/.config --env MAVEN_USER_HOME=/app/.m2 \
+  eclipse-temurin:17-jdk-jammy ./mvnw surefire:test -Dmaven.repo.local=/app/.m2/repository

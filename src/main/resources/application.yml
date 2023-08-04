@@ -1,0 +1,19 @@
+server:
+  compression:
+    enabled: true
+
+spring:
+  web:
+    resources:
+      # Disable the default static resources handling. We configure it manually in the Java code
+      add-mappings: false
+  devtools:
+    # The following settings are required for the hot reload to work properly
+    # With lower settings it fails to reload the changes when annotation processing is enabled and some files are
+    # still being generated
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
+
+app:
+  printEnv: ${PRINT_ENV:true}

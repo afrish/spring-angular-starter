@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  app:
+    user: "${user_id:-1000}:${group_id:-1000}"
+    image: eclipse-temurin:17-jdk-jammy
+    env_file:
+      - .env
+    environment:
+      - HOME=/app
+      - XDG_CONFIG_HOME=/app/.config
+      - MAVEN_USER_HOME=/app/.m2
+    working_dir: /app
+    ports:
+      - "${DEV_HTTP_PORT:-8080}:8080"
+      - "${DEV_DEBUG_PORT:-5005}:5005"
+    volumes:
+      - .:/app
+      - $HOME/.m2:/app/.m2
+    command: >
+      ./mvnw spring-boot:run
+        -Pdev
+        -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+        -Dmaven.repo.local=/app/.m2/repository

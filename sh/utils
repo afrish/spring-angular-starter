@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+wait_for_service_startup() {
+  local service_url="${1}"
+  local attempt_counter=0
+  local max_attempts=10
+
+  until curl --output /dev/null --silent --head --fail "${service_url}"; do
+    if [ "${attempt_counter}" -eq "${max_attempts}" ]; then
+      echo "[ERROR] Max attempts reached while waiting for ${service_url} to start"
+      exit 1
+    fi
+
+    printf '.'
+    attempt_counter=$((attempt_counter + 1))
+    sleep 5
+  done
+
+  echo
+
+}

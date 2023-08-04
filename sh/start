@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/.." || exit
+
+if [[ "$1" == "" ]]; then
+    echo "Failure! Pass the release version to this script as parameter #1"
+    exit 1;
+fi
+
+./sh/build "$1"
+
+source .env
+
+docker rm -f -v spring-angular-starter || true
+docker run --rm -p "${DEV_HTTP_PORT:-8080}:8080" -p "${DEV_DEBUG_PORT:-5005}:5005" \
+           --name spring-angular-starter \
+           --volume /tmp:/tmp \
+           --env-file .env \
+           "sample/spring-angular-starter:$1"
